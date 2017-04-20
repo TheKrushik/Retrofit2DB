@@ -25,7 +25,8 @@ public class FlawerDetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        Flower flower = (Flower) intent.getSerializableExtra(Const.REFERENCE.FLOWER);
+//        Flower flower = (Flower) intent.getSerializableExtra(Const.REFERENCE.FLOWER);
+        Flower flower = (Flower) intent.getParcelableExtra(Const.REFERENCE.FLOWER);
 
         initViews();
 

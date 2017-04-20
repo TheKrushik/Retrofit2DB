@@ -20,7 +20,7 @@ import info.krushik.retrofit2db.callback.FlowerFetchListener;
 import info.krushik.retrofit2db.model.Flower;
 import info.krushik.retrofit2db.view.adapter.FlowerAdapter;
 import info.krushik.retrofit2db.Const;
-import info.krushik.retrofit2db.database.FlowerDatabase;
+import info.krushik.retrofit2db.database.DatabaseHelper;
 import info.krushik.retrofit2db.Utils;
 
 import java.io.InputStream;
@@ -38,7 +38,7 @@ public class FlowerListActivity extends AppCompatActivity implements FlowerAdapt
     private RecyclerView mRecyclerView;
     private RestManager mManager;
     private FlowerAdapter mFlowerAdapter;
-    private FlowerDatabase mDatabase;
+    private DatabaseHelper mDatabase;
     private Button mReload;
     private ProgressDialog mDialog;
 
@@ -49,7 +49,7 @@ public class FlowerListActivity extends AppCompatActivity implements FlowerAdapt
         initViews();
 
         mManager = new RestManager();
-        mDatabase = new FlowerDatabase(this);
+        mDatabase = new DatabaseHelper(this);
 
         loadFlowerFeed();
 
@@ -166,7 +166,6 @@ public class FlowerListActivity extends AppCompatActivity implements FlowerAdapt
     }
 
     public class SaveIntoDatabase extends AsyncTask<Flower, Void, Void> {
-
 
         private final String TAG = SaveIntoDatabase.class.getSimpleName();
 

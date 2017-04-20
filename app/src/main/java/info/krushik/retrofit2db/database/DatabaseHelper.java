@@ -10,19 +10,19 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import info.krushik.retrofit2db.callback.FlowerFetchListener;
 import info.krushik.retrofit2db.Const;
 import info.krushik.retrofit2db.Utils;
 import info.krushik.retrofit2db.model.Flower;
 
-import java.util.ArrayList;
-import java.util.List;
+public class DatabaseHelper extends SQLiteOpenHelper {
 
-public class FlowerDatabase extends SQLiteOpenHelper {
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
 
-    private static final String TAG = FlowerDatabase.class.getSimpleName();
-
-    public FlowerDatabase(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, Const.DATABASE.DB_NAME, null, Const.DATABASE.DB_VERSION);
     }
 
