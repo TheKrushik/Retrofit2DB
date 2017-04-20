@@ -1,20 +1,13 @@
 package info.krushik.retrofit2db.model;
 
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
-public class Flower implements Parcelable {
+public class Post implements Parcelable {
 
     @SerializedName("category")
     @Expose
@@ -126,10 +119,10 @@ public class Flower implements Parcelable {
 
     }
 
-    public Flower() {
+    public Post() {
     }
 
-    protected Flower(Parcel in) {
+    public Post(Parcel in) {
         this.category = in.readString();
         this.price = in.readDouble();
         this.instructions = in.readString();
@@ -140,19 +133,20 @@ public class Flower implements Parcelable {
         this.isFromDatabase = in.readByte() != 0;
     }
 
-    public static final Creator<Flower> CREATOR = new Creator<Flower>() {
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
-        public Flower createFromParcel(Parcel source) {
-            return new Flower(source);
+        public Post createFromParcel(Parcel source) {
+            return new Post(source);
         }
 
         @Override
-        public Flower[] newArray(int size) {
-            return new Flower[size];
+        public Post[] newArray(int size) {
+            return new Post[size];
         }
     };
 }
-//public class Flower implements Serializable {
+
+//public class Post implements Serializable {
 //
 //    private static final long serialVersionUID = 111696345129311948L;
 //    public byte[] imageByteArray;

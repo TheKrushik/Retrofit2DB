@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 
 import info.krushik.retrofit2db.R;
-import info.krushik.retrofit2db.view.fragment.FlowerListFragment;
+import info.krushik.retrofit2db.view.fragment.PostListFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        switchToFragment(new FlowerListFragment());
+        switchToFragment(new PostListFragment());
     }
 
     private void initViews() {

@@ -7,19 +7,19 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RestManager {
 
-    private static FlowerService mFlowerService;
+    private static ApiService mApiService;
 
-    public FlowerService getFlowerService() {
+    public ApiService getNewsService() {
 
-        if (mFlowerService == null) {
+        if (mApiService == null) {
 
             Retrofit retrofit = new Retrofit.Builder()
                     .baseUrl(Const.HTTP.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 
-            mFlowerService = retrofit.create(FlowerService.class);
+            mApiService = retrofit.create(ApiService.class);
         }
-        return mFlowerService;
+        return mApiService;
     }
 }

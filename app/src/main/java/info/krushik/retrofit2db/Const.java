@@ -4,18 +4,18 @@ public class Const {
 
     public static final class HTTP {
         public static final String BASE_URL = "http://services.hanselandpetal.com";
-        public static final String FLOWERS_URL = "/feeds/flowers.json";
+        public static final String NEWS_URL = "/feeds/flowers.json";
     }
 
     public static final class DATABASE {
 
-        public static final String DB_NAME = "flowers.db";
+        public static final String DB_NAME = "NewsDB.db";
         public static final int DB_VERSION = 1;
-        public static final String TABLE_NAME = "flower";
+        public static final String TABLE_NAME = "news";
 
         public static final String DROP_QUERY = "DROP TABLE IF EXIST " + TABLE_NAME;
 
-        public static final String GET_FLOWERS_QUERY = "SELECT * FROM " + TABLE_NAME;
+        public static final String GET_NEWS_QUERY = "SELECT * FROM " + TABLE_NAME;
 
         public static final String PRODUCT_ID = "productId";
         public static final String CATEGORY = "category";
@@ -37,7 +37,7 @@ public class Const {
     }
 
     public static final class REFERENCE {
-        public static final String FLOWER = Config.PACKAGE_NAME + "flower";
+        public static final String NEWS = Config.PACKAGE_NAME + "news";
     }
 
     public static final class Config {

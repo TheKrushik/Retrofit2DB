@@ -13,10 +13,10 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import info.krushik.retrofit2db.callback.FlowerFetchListener;
+import info.krushik.retrofit2db.callback.NewsFetchListener;
 import info.krushik.retrofit2db.Const;
 import info.krushik.retrofit2db.Utils;
-import info.krushik.retrofit2db.model.Flower;
+import info.krushik.retrofit2db.model.Post;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
 
@@ -41,19 +41,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         this.onCreate(db);
     }
 
-    public void addFlower(Flower flower) {
+    public void addFlower(Post post) {
 
-        Log.d(TAG, "Values Got " + flower.getName());
+        Log.d(TAG, "Values Got " + post.getName());
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(Const.DATABASE.PRODUCT_ID, flower.getProductId());
-        values.put(Const.DATABASE.CATEGORY, flower.getCategory());
-        values.put(Const.DATABASE.PRICE, Double.toString(flower.getPrice()));
-        values.put(Const.DATABASE.INSTRUCTIONS, flower.getInstructions());
-        values.put(Const.DATABASE.NAME, flower.getName());
-        values.put(Const.DATABASE.PHOTO_URL, flower.getPhoto());
-        values.put(Const.DATABASE.PHOTO, Utils.getPictureByteOfArray(flower.getPicture()));
+        values.put(Const.DATABASE.PRODUCT_ID, post.getProductId());
+        values.put(Const.DATABASE.CATEGORY, post.getCategory());
+        values.put(Const.DATABASE.PRICE, Double.toString(post.getPrice()));
+        values.put(Const.DATABASE.INSTRUCTIONS, post.getInstructions());
+        values.put(Const.DATABASE.NAME, post.getName());
+        values.put(Const.DATABASE.PHOTO_URL, post.getPhoto());
+        values.put(Const.DATABASE.PHOTO, Utils.getPictureByteOfArray(post.getPicture()));
 
         try {
             db.insert(Const.DATABASE.TABLE_NAME, null, values);
@@ -63,43 +63,43 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void fetchFlowers(FlowerFetchListener listener) {
-        FlowerFetcher fetcher = new FlowerFetcher(listener, this.getWritableDatabase());
+    public void fetchPosts(NewsFetchListener listener) {
+        PostFetcher fetcher = new PostFetcher(listener, this.getWritableDatabase());
         fetcher.start();
     }
 
-    public class FlowerFetcher extends Thread {
+    public class PostFetcher extends Thread {
 
-        private final FlowerFetchListener mListener;
+        private final NewsFetchListener mListener;
         private final SQLiteDatabase mDb;
 
-        public FlowerFetcher(FlowerFetchListener listener, SQLiteDatabase db) {
+        public PostFetcher(NewsFetchListener listener, SQLiteDatabase db) {
             mListener = listener;
             mDb = db;
         }
 
         @Override
         public void run() {
-            Cursor cursor = mDb.rawQuery(Const.DATABASE.GET_FLOWERS_QUERY, null);
+            Cursor cursor = mDb.rawQuery(Const.DATABASE.GET_NEWS_QUERY, null);
 
-            final List<Flower> flowerList = new ArrayList<>();
+            final List<Post> postList = new ArrayList<>();
 
             if (cursor.getCount() > 0) {
 
                 if (cursor.moveToFirst()) {
                     do {
-                        Flower flower = new Flower();
-                        flower.setFromDatabase(true);
-                        flower.setName(cursor.getString(cursor.getColumnIndex(Const.DATABASE.NAME)));
-                        flower.setPrice(Double.parseDouble(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PRICE))));
-                        flower.setInstructions(cursor.getString(cursor.getColumnIndex(Const.DATABASE.INSTRUCTIONS)));
-                        flower.setCategory(cursor.getString(cursor.getColumnIndex(Const.DATABASE.CATEGORY)));
-                        flower.setPicture(Utils.getBitmapFromByte(cursor.getBlob(cursor.getColumnIndex(Const.DATABASE.PHOTO))));
-                        flower.setProductId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PRODUCT_ID))));
-                        flower.setPhoto(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PHOTO_URL)));
+                        Post post = new Post();
+                        post.setFromDatabase(true);
+                        post.setName(cursor.getString(cursor.getColumnIndex(Const.DATABASE.NAME)));
+                        post.setPrice(Double.parseDouble(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PRICE))));
+                        post.setInstructions(cursor.getString(cursor.getColumnIndex(Const.DATABASE.INSTRUCTIONS)));
+                        post.setCategory(cursor.getString(cursor.getColumnIndex(Const.DATABASE.CATEGORY)));
+                        post.setPicture(Utils.getBitmapFromByte(cursor.getBlob(cursor.getColumnIndex(Const.DATABASE.PHOTO))));
+                        post.setProductId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PRODUCT_ID))));
+                        post.setPhoto(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PHOTO_URL)));
 
-                        flowerList.add(flower);
-                        publishFlower(flower);
+                        postList.add(post);
+                        publishPost(post);
 
                     } while (cursor.moveToNext());
                 }
@@ -108,18 +108,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mListener.onDeliverAllFlowers(flowerList);
+                    mListener.onDeliverAllPosts(postList);
                     mListener.onHideDialog();
                 }
             });
         }
 
-        public void publishFlower(final Flower flower) {
+        public void publishPost(final Post post) {
             Handler handler = new Handler(Looper.getMainLooper());
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mListener.onDeliverFlower(flower);
+                    mListener.onDeliverPost(post);
                 }
             });
         }

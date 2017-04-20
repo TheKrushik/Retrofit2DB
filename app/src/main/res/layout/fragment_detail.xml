@@ -10,7 +10,7 @@
         android:orientation="vertical">
 
         <ImageView
-            android:id="@+id/flowerPhoto"
+            android:id="@+id/ivPhoto"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_gravity="center_horizontal" />
@@ -29,7 +29,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/flowerName"
+                android:id="@+id/tvName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
@@ -49,7 +49,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/flowerId"
+                android:id="@+id/tvId"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
@@ -69,7 +69,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/flowerCategory"
+                android:id="@+id/tvCategory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
@@ -89,7 +89,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/flowerPrice"
+                android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"
@@ -103,14 +103,13 @@
             android:padding="3dp">
 
             <TextView
-                android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Instruction: "
                 android:textAppearance="?android:attr/textAppearanceLarge" />
 
             <TextView
-                android:id="@+id/flowerInstruction"
+                android:id="@+id/tvInstruction"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Medium Text"

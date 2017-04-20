@@ -1,15 +1,12 @@
 package info.krushik.retrofit2db.view.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,25 +24,22 @@ import info.krushik.retrofit2db.Const;
 import info.krushik.retrofit2db.R;
 import info.krushik.retrofit2db.Utils;
 import info.krushik.retrofit2db.api.RestManager;
-import info.krushik.retrofit2db.callback.FlowerFetchListener;
+import info.krushik.retrofit2db.callback.NewsFetchListener;
 import info.krushik.retrofit2db.database.DatabaseHelper;
-import info.krushik.retrofit2db.model.Flower;
-import info.krushik.retrofit2db.view.activity.FlawerDetailActivity;
-import info.krushik.retrofit2db.view.activity.FlowerListActivity;
+import info.krushik.retrofit2db.model.Post;
 import info.krushik.retrofit2db.view.activity.MainActivity;
-import info.krushik.retrofit2db.view.adapter.FlowerAdapter;
+import info.krushik.retrofit2db.view.adapter.PostAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+public class PostListFragment extends Fragment
+        implements PostAdapter.PostClickListener, NewsFetchListener {
 
-public class FlowerListFragment extends Fragment
-        implements FlowerAdapter.FlowerClickListener, FlowerFetchListener {
-
-    private static final String TAG = FlowerListFragment.class.getSimpleName();
+    private static final String TAG = PostListFragment.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private RestManager mManager;
-    private FlowerAdapter mFlowerAdapter;
+    private PostAdapter mPostAdapter;
     private DatabaseHelper mDatabase;
     private Button mReload;
     private ProgressDialog mDialog;
@@ -61,9 +55,8 @@ public class FlowerListFragment extends Fragment
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_flower_list, container, false);
+        View v = inflater.inflate(R.layout.fragment_post_list, container, false);
         initViews(v);
-
         loadFlowerFeed();
 
         mReload.setOnClickListener(new View.OnClickListener() {
@@ -77,25 +70,25 @@ public class FlowerListFragment extends Fragment
     }
 
     private void initViews(View v) {
-        mReload = (Button) v.findViewById(R.id.reload);
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        mReload = (Button) v.findViewById(R.id.btnReload);
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.rvPost);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setRecycledViewPool(new RecyclerView.RecycledViewPool());
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),
                 LinearLayoutManager.VERTICAL, false));
 
-        mFlowerAdapter = new FlowerAdapter(this);
-        mRecyclerView.setAdapter(mFlowerAdapter);
+        mPostAdapter = new PostAdapter(this);
+        mRecyclerView.setAdapter(mPostAdapter);
     }
 
     private void loadFlowerFeed() {
         mDialog = new ProgressDialog(getActivity());
-        mDialog.setMessage("Loading Flower Data...");
+        mDialog.setMessage("Loading Post Data...");
         mDialog.setCancelable(true);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mDialog.setIndeterminate(true);
 
-        mFlowerAdapter.reset();
+        mPostAdapter.reset();
 
         mDialog.show();
 
@@ -107,49 +100,40 @@ public class FlowerListFragment extends Fragment
     }
 
     private void getFeedFromDatabase() {
-        mDatabase.fetchFlowers(this);
+        mDatabase.fetchPosts(this);
     }
 
     @Override
     public void onClick(int position) {
-        Flower selectedFlower = mFlowerAdapter.getSelectedFlower(position);
-//        Intent intent = new Intent(getActivity(), FlawerDetailActivity.class);
-//        intent.putExtra(Const.REFERENCE.FLOWER, selectedFlower);
-//        startActivity(intent);
 
-//        MainActivity act = (MainActivity) getActivity();
-//        act.switchToFragment(new FlawerDetailtFragment());
+        Post selectedPost = mPostAdapter.getSelectedFlower(position);
 
-        Fragment fragmentGet = new FlawerDetailtFragment();
+        Fragment fragmentDetail = new PostDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Const.REFERENCE.FLOWER, selectedFlower);
+        bundle.putParcelable(Const.REFERENCE.NEWS, selectedPost);
+        fragmentDetail.setArguments(bundle);
 
-        fragmentGet.setArguments(bundle);
-
-        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.container, fragmentGet);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
+        MainActivity act = (MainActivity) getActivity();
+        act.switchToFragment(fragmentDetail);
     }
 
     public void getFeed() {
 
-        Call<List<Flower>> listCall = mManager.getFlowerService().getAllFlowers();
-        listCall.enqueue(new Callback<List<Flower>>() {
+        Call<List<Post>> listCall = mManager.getNewsService().getAllNews();
+        listCall.enqueue(new Callback<List<Post>>() {
             @Override
-            public void onResponse(Call<List<Flower>> call, Response<List<Flower>> response) {
+            public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
 
                 if (response.isSuccessful()) {
-                    List<Flower> flowerList = response.body();
+                    List<Post> postList = response.body();
 
-                    for (int i = 0; i < flowerList.size(); i++) {
-                        Flower flower = flowerList.get(i);
+                    for (int i = 0; i < postList.size(); i++) {
+                        Post post = postList.get(i);
 
-                        FlowerListFragment.SaveIntoDatabase task = new FlowerListFragment.SaveIntoDatabase();
-                        task.execute(flower);
+                        PostListFragment.SaveIntoDatabase task = new PostListFragment.SaveIntoDatabase();
+                        task.execute(post);
 
-                        mFlowerAdapter.addFlower(flower);
+                        mPostAdapter.addFlower(post);
                     }
                 } else {
                     int sc = response.code();
@@ -168,7 +152,7 @@ public class FlowerListFragment extends Fragment
             }
 
             @Override
-            public void onFailure(Call<List<Flower>> call, Throwable t) {
+            public void onFailure(Call<List<Post>> call, Throwable t) {
                 mDialog.dismiss();
                 Toast.makeText(getContext(), t.getMessage(), Toast.LENGTH_SHORT).show();
             }
@@ -180,13 +164,13 @@ public class FlowerListFragment extends Fragment
     }
 
     @Override
-    public void onDeliverAllFlowers(List<Flower> flowers) {
+    public void onDeliverAllPosts(List<Post> posts) {
 
     }
 
     @Override
-    public void onDeliverFlower(Flower flower) {
-        mFlowerAdapter.addFlower(flower);
+    public void onDeliverPost(Post post) {
+        mPostAdapter.addFlower(post);
     }
 
     @Override
@@ -194,9 +178,9 @@ public class FlowerListFragment extends Fragment
         mDialog.dismiss();
     }
 
-    public class SaveIntoDatabase extends AsyncTask<Flower, Void, Void> {
+    public class SaveIntoDatabase extends AsyncTask<Post, Void, Void> {
 
-        private final String TAG = FlowerListActivity.SaveIntoDatabase.class.getSimpleName();
+        private final String TAG = PostListFragment.SaveIntoDatabase.class.getSimpleName();
 
         @Override
         protected void onPreExecute() {
@@ -204,15 +188,15 @@ public class FlowerListFragment extends Fragment
         }
 
         @Override
-        protected Void doInBackground(Flower... params) {
+        protected Void doInBackground(Post... params) {
 
-            Flower flower = params[0];
+            Post post = params[0];
 
             try {
-                InputStream stream = new URL(Const.HTTP.BASE_URL + "/photos/" + flower.getPhoto()).openStream();
+                InputStream stream = new URL(Const.HTTP.BASE_URL + "/photos/" + post.getPhoto()).openStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(stream);
-                flower.setPicture(bitmap);
-                mDatabase.addFlower(flower);
+                post.setPicture(bitmap);
+                mDatabase.addFlower(post);
 
             } catch (Exception e) {
                 Log.d(TAG, e.getMessage());
