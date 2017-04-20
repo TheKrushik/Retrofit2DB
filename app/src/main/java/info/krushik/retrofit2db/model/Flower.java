@@ -124,10 +124,6 @@ public class Flower implements Parcelable {
         dest.writeParcelable(this.picture, flags);
         dest.writeByte(this.isFromDatabase ? (byte) 1 : (byte) 0);
 
-//        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-//        picture.compress(Bitmap.CompressFormat.PNG, 0, byteStream);
-//        byte bitmapBytes[] = byteStream.toByteArray();
-//        dest.writeByte(bitmapBytes, 0, bitmapBytes.length);
     }
 
     public Flower() {
