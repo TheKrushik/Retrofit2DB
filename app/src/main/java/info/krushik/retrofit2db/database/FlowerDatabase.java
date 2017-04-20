@@ -11,7 +11,7 @@ import android.os.Looper;
 import android.util.Log;
 
 import info.krushik.retrofit2db.callback.FlowerFetchListener;
-import info.krushik.retrofit2db.Constants;
+import info.krushik.retrofit2db.Const;
 import info.krushik.retrofit2db.Utils;
 import info.krushik.retrofit2db.model.Flower;
 
@@ -23,13 +23,13 @@ public class FlowerDatabase extends SQLiteOpenHelper {
     private static final String TAG = FlowerDatabase.class.getSimpleName();
 
     public FlowerDatabase(Context context) {
-        super(context, Constants.DATABASE.DB_NAME, null, Constants.DATABASE.DB_VERSION);
+        super(context, Const.DATABASE.DB_NAME, null, Const.DATABASE.DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            db.execSQL(Constants.DATABASE.CREATE_TABLE_QUERY);
+            db.execSQL(Const.DATABASE.CREATE_TABLE_QUERY);
         } catch (SQLException ex) {
             Log.d(TAG, ex.getMessage());
         }
@@ -37,7 +37,7 @@ public class FlowerDatabase extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(Constants.DATABASE.DROP_QUERY);
+        db.execSQL(Const.DATABASE.DROP_QUERY);
         this.onCreate(db);
     }
 
@@ -47,16 +47,16 @@ public class FlowerDatabase extends SQLiteOpenHelper {
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(Constants.DATABASE.PRODUCT_ID, flower.getProductId());
-        values.put(Constants.DATABASE.CATEGORY, flower.getCategory());
-        values.put(Constants.DATABASE.PRICE, Double.toString(flower.getPrice()));
-        values.put(Constants.DATABASE.INSTRUCTIONS, flower.getInstructions());
-        values.put(Constants.DATABASE.NAME, flower.getName());
-        values.put(Constants.DATABASE.PHOTO_URL, flower.getPhoto());
-        values.put(Constants.DATABASE.PHOTO, Utils.getPictureByteOfArray(flower.getPicture()));
+        values.put(Const.DATABASE.PRODUCT_ID, flower.getProductId());
+        values.put(Const.DATABASE.CATEGORY, flower.getCategory());
+        values.put(Const.DATABASE.PRICE, Double.toString(flower.getPrice()));
+        values.put(Const.DATABASE.INSTRUCTIONS, flower.getInstructions());
+        values.put(Const.DATABASE.NAME, flower.getName());
+        values.put(Const.DATABASE.PHOTO_URL, flower.getPhoto());
+        values.put(Const.DATABASE.PHOTO, Utils.getPictureByteOfArray(flower.getPicture()));
 
         try {
-            db.insert(Constants.DATABASE.TABLE_NAME, null, values);
+            db.insert(Const.DATABASE.TABLE_NAME, null, values);
         } catch (Exception e) {
 
         }
@@ -80,7 +80,7 @@ public class FlowerDatabase extends SQLiteOpenHelper {
 
         @Override
         public void run() {
-            Cursor cursor = mDb.rawQuery(Constants.DATABASE.GET_FLOWERS_QUERY, null);
+            Cursor cursor = mDb.rawQuery(Const.DATABASE.GET_FLOWERS_QUERY, null);
 
             final List<Flower> flowerList = new ArrayList<>();
 
@@ -90,13 +90,13 @@ public class FlowerDatabase extends SQLiteOpenHelper {
                     do {
                         Flower flower = new Flower();
                         flower.setFromDatabase(true);
-                        flower.setName(cursor.getString(cursor.getColumnIndex(Constants.DATABASE.NAME)));
-                        flower.setPrice(Double.parseDouble(cursor.getString(cursor.getColumnIndex(Constants.DATABASE.PRICE))));
-                        flower.setInstructions(cursor.getString(cursor.getColumnIndex(Constants.DATABASE.INSTRUCTIONS)));
-                        flower.setCategory(cursor.getString(cursor.getColumnIndex(Constants.DATABASE.CATEGORY)));
-                        flower.setPicture(Utils.getBitmapFromByte(cursor.getBlob(cursor.getColumnIndex(Constants.DATABASE.PHOTO))));
-                        flower.setProductId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Constants.DATABASE.PRODUCT_ID))));
-                        flower.setPhoto(cursor.getString(cursor.getColumnIndex(Constants.DATABASE.PHOTO_URL)));
+                        flower.setName(cursor.getString(cursor.getColumnIndex(Const.DATABASE.NAME)));
+                        flower.setPrice(Double.parseDouble(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PRICE))));
+                        flower.setInstructions(cursor.getString(cursor.getColumnIndex(Const.DATABASE.INSTRUCTIONS)));
+                        flower.setCategory(cursor.getString(cursor.getColumnIndex(Const.DATABASE.CATEGORY)));
+                        flower.setPicture(Utils.getBitmapFromByte(cursor.getBlob(cursor.getColumnIndex(Const.DATABASE.PHOTO))));
+                        flower.setProductId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PRODUCT_ID))));
+                        flower.setPhoto(cursor.getString(cursor.getColumnIndex(Const.DATABASE.PHOTO_URL)));
 
                         flowerList.add(flower);
                         publishFlower(flower);

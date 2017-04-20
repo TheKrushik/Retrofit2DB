@@ -1,14 +1,15 @@
 package info.krushik.retrofit2db;
 
-public class Constants {
+public class Const {
 
     public static final class HTTP {
         public static final String BASE_URL = "http://services.hanselandpetal.com";
+        public static final String FLOWERS_URL = "/feeds/flowers.json";
     }
 
     public static final class DATABASE {
 
-        public static final String DB_NAME = "flowers";
+        public static final String DB_NAME = "flowers.db";
         public static final int DB_VERSION = 1;
         public static final String TABLE_NAME = "flower";
 

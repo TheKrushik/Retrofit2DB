@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import info.krushik.retrofit2db.R;
-import info.krushik.retrofit2db.Constants;
+import info.krushik.retrofit2db.Const;
 import info.krushik.retrofit2db.model.Flower;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class FlowerAdapter extends RecyclerView.Adapter<FlowerAdapter.Holder> {
 
     @Override
     public Holder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View row = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_item, null, false);
+        View row = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flawer, null, false);
         return new Holder(row);
     }
 
@@ -44,7 +44,7 @@ public class FlowerAdapter extends RecyclerView.Adapter<FlowerAdapter.Holder> {
         if (currFlower.isFromDatabase()) {
             holder.mPhoto.setImageBitmap(currFlower.getPicture());
         } else {
-            Picasso.with(holder.itemView.getContext()).load(Constants.HTTP.BASE_URL + "/photos/" + currFlower.getPhoto()).into(holder.mPhoto);
+            Picasso.with(holder.itemView.getContext()).load(Const.HTTP.BASE_URL + "/photos/" + currFlower.getPhoto()).into(holder.mPhoto);
         }
     }
 

@@ -1,6 +1,6 @@
 package info.krushik.retrofit2db.api;
 
-import info.krushik.retrofit2db.Constants;
+import info.krushik.retrofit2db.Const;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -14,7 +14,7 @@ public class RestManager {
         if (mFlowerService == null) {
 
             Retrofit retrofit = new Retrofit.Builder()
-                    .baseUrl(Constants.HTTP.BASE_URL)
+                    .baseUrl(Const.HTTP.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
 

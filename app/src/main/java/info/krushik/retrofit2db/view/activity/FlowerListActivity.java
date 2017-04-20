@@ -19,7 +19,7 @@ import info.krushik.retrofit2db.api.RestManager;
 import info.krushik.retrofit2db.callback.FlowerFetchListener;
 import info.krushik.retrofit2db.model.Flower;
 import info.krushik.retrofit2db.view.adapter.FlowerAdapter;
-import info.krushik.retrofit2db.Constants;
+import info.krushik.retrofit2db.Const;
 import info.krushik.retrofit2db.database.FlowerDatabase;
 import info.krushik.retrofit2db.Utils;
 
@@ -32,9 +32,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class MainActivity extends AppCompatActivity implements FlowerAdapter.FlowerClickListener, FlowerFetchListener {
+public class FlowerListActivity extends AppCompatActivity implements FlowerAdapter.FlowerClickListener, FlowerFetchListener {
 
-    private static final String TAG = MainActivity.class.getSimpleName();
+    private static final String TAG = FlowerListActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private RestManager mManager;
     private FlowerAdapter mFlowerAdapter;
@@ -45,8 +45,8 @@ public class MainActivity extends AppCompatActivity implements FlowerAdapter.Flo
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        configViews();
+        setContentView(R.layout.activity_flower_list);
+        initViews();
 
         mManager = new RestManager();
         mDatabase = new FlowerDatabase(this);
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity implements FlowerAdapter.Flo
 
     private void loadFlowerFeed() {
 
-        mDialog = new ProgressDialog(MainActivity.this);
+        mDialog = new ProgressDialog(FlowerListActivity.this);
         mDialog.setMessage("Loading Flower Data...");
         mDialog.setCancelable(true);
         mDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements FlowerAdapter.Flo
         mDatabase.fetchFlowers(this);
     }
 
-    private void configViews() {
+    private void initViews() {
         mReload = (Button) findViewById(R.id.reload);
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -99,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements FlowerAdapter.Flo
     @Override
     public void onClick(int position) {
         Flower selectedFlower = mFlowerAdapter.getSelectedFlower(position);
-        Intent intent = new Intent(MainActivity.this, DetailActivity.class);
-        intent.putExtra(Constants.REFERENCE.FLOWER, selectedFlower);
+        Intent intent = new Intent(FlowerListActivity.this, FlawerDetailActivity.class);
+        intent.putExtra(Const.REFERENCE.FLOWER, selectedFlower);
         startActivity(intent);
     }
 
@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements FlowerAdapter.Flo
             Flower flower = params[0];
 
             try {
-                InputStream stream = new URL(Constants.HTTP.BASE_URL + "/photos/" + flower.getPhoto()).openStream();
+                InputStream stream = new URL(Const.HTTP.BASE_URL + "/photos/" + flower.getPhoto()).openStream();
                 Bitmap bitmap = BitmapFactory.decodeStream(stream);
                 flower.setPicture(bitmap);
                 mDatabase.addFlower(flower);

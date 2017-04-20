@@ -11,9 +11,9 @@ import com.squareup.picasso.Picasso;
 
 import info.krushik.retrofit2db.R;
 import info.krushik.retrofit2db.model.Flower;
-import info.krushik.retrofit2db.Constants;
+import info.krushik.retrofit2db.Const;
 
-public class DetailActivity extends AppCompatActivity {
+public class FlawerDetailActivity extends AppCompatActivity {
 
     private ImageView mPhoto;
     private TextView mName, mId, mCategory, mInstruction, mPrice;
@@ -25,7 +25,7 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        Flower flower = (Flower) intent.getSerializableExtra(Constants.REFERENCE.FLOWER);
+        Flower flower = (Flower) intent.getSerializableExtra(Const.REFERENCE.FLOWER);
 
         initViews();
 
@@ -38,7 +38,7 @@ public class DetailActivity extends AppCompatActivity {
         if (flower.isFromDatabase()) {
             mPhoto.setImageBitmap(flower.getPicture());
         } else {
-            Picasso.with(getApplicationContext()).load(Constants.HTTP.BASE_URL + "/photos/" + flower.getPhoto()).into(mPhoto);
+            Picasso.with(getApplicationContext()).load(Const.HTTP.BASE_URL + "/photos/" + flower.getPhoto()).into(mPhoto);
         }
     }
 
