@@ -37,11 +37,11 @@ public class Const {
     }
 
     public static final class REFERENCE {
-        public static final String NEWS = Config.PACKAGE_NAME + "news";
+        public static final String POST = Config.PACKAGE_NAME + ".post";
     }
 
     public static final class Config {
-        public static final String PACKAGE_NAME = "info.krushik.retrofit2db.";
+        public static final String PACKAGE_NAME = "info.krushik.retrofit2db";
     }
 
 

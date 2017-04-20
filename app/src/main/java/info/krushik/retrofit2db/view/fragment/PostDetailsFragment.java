@@ -34,7 +34,7 @@ public class PostDetailsFragment extends Fragment {
         Post post = new Post(Parcel.obtain());
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            post = bundle.getParcelable(Const.REFERENCE.NEWS);
+            post = bundle.getParcelable(Const.REFERENCE.POST);
         }
 
         initViews(v);

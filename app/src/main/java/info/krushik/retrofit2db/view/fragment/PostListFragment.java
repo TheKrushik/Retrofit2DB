@@ -110,7 +110,7 @@ public class PostListFragment extends Fragment
 
         Fragment fragmentDetail = new PostDetailsFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelable(Const.REFERENCE.NEWS, selectedPost);
+        bundle.putParcelable(Const.REFERENCE.POST, selectedPost);
         fragmentDetail.setArguments(bundle);
 
         MainActivity act = (MainActivity) getActivity();
