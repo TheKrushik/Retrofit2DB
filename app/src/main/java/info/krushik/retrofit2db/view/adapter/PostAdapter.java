@@ -54,12 +54,12 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.Holder> {
         return mPosts.size();
     }
 
-    public void addFlower(Post post) {
+    public void addPost(Post post) {
         mPosts.add(post);
         notifyDataSetChanged();
     }
 
-    public Post getSelectedFlower(int position) {
+    public Post getSelectedPost(int position) {
         return mPosts.get(position);
     }
 

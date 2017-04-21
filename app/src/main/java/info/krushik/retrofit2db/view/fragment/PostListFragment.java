@@ -106,7 +106,7 @@ public class PostListFragment extends Fragment
     @Override
     public void onClick(int position) {
 
-        Post selectedPost = mPostAdapter.getSelectedFlower(position);
+        Post selectedPost = mPostAdapter.getSelectedPost(position);
 
         Fragment fragmentDetail = new PostDetailsFragment();
         Bundle bundle = new Bundle();
@@ -133,7 +133,7 @@ public class PostListFragment extends Fragment
                         PostListFragment.SaveIntoDatabase task = new PostListFragment.SaveIntoDatabase();
                         task.execute(post);
 
-                        mPostAdapter.addFlower(post);
+                        mPostAdapter.addPost(post);
                     }
                 } else {
                     int sc = response.code();
@@ -170,7 +170,7 @@ public class PostListFragment extends Fragment
 
     @Override
     public void onDeliverPost(Post post) {
-        mPostAdapter.addFlower(post);
+        mPostAdapter.addPost(post);
     }
 
     @Override
